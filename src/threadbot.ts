@@ -1,6 +1,7 @@
 import { ClientEvent, MatrixClient, createClient } from "matrix-js-sdk";
 import { SyncState } from "matrix-js-sdk/lib/sync";
 import { Config } from "./types";
+import { joinOnRoomInvite } from "./joinOnRoomInvite";
 
 export async function startBot({ baseUrl, userId, password }: Config) {
 
@@ -30,6 +31,8 @@ export async function startBot({ baseUrl, userId, password }: Config) {
         break;
     }
   });
+
+  joinOnRoomInvite(client);
   
   await client.loginWithPassword(userId, password);
   await client.startClient({
