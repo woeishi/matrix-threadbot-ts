@@ -1,4 +1,4 @@
-import { loadConfig } from "./loadConfig";
+import { loadConfig } from "./config/load";
 import { startBot } from "./threadbot";
 
 async function main() {
