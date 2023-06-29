@@ -2,6 +2,8 @@ import { ClientEvent, MatrixClient, createClient } from "matrix-js-sdk";
 import { SyncState } from "matrix-js-sdk/lib/sync";
 import { Config } from "./config/types";
 import { joinOnRoomInvite } from "./joinOnRoomInvite";
+import { catchUpMention } from "./catchUpMention";
+import { listenNewMention } from "./listenNewMention";
 
 export async function startBot({ baseUrl, userId, password }: Config) {
 
@@ -16,15 +18,17 @@ export async function startBot({ baseUrl, userId, password }: Config) {
     timelineSupport: true
   });
 
-  client.on(ClientEvent.Sync, (state) => {
+  client.on(ClientEvent.Sync, async (state) => {
     switch (state) {
       case SyncState.Prepared:
         if (!clientIsPrepared) {
           clientIsPrepared = true;
           console.log("client prepared");
           // catch up
+          await catchUpMention(client);
           console.log("bot caught up");
           // attach listeners
+          listenNewMention(client);
           console.log("bot active");
           resolveClientInit(client);
         }
@@ -39,6 +43,7 @@ export async function startBot({ baseUrl, userId, password }: Config) {
     disablePresence: true,
     threadSupport: true,
   });
+  await clientStartedPromise;
 
-  return clientStartedPromise;
+  return client;
 }
