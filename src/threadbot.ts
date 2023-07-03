@@ -5,6 +5,7 @@ import { joinOnRoomInvite } from "./joinOnRoomInvite";
 import { catchUpMention } from "./catchUpMention";
 import { listenNewMention } from "./listenNewMention";
 import { tryJoinConfiguredRooms } from "./tryJoinConfiguredRooms";
+import { capture } from "./capturing/capture";
 
 export async function startBot({ baseUrl, userId, password, rooms }: Config) {
 
@@ -26,10 +27,10 @@ export async function startBot({ baseUrl, userId, password, rooms }: Config) {
           clientIsPrepared = true;
           console.log("client prepared");
           // catch up
-          await catchUpMention(client);
+          await catchUpMention(client, capture);
           console.log("bot caught up");
           // attach listeners
-          listenNewMention(client);
+          listenNewMention(client, capture);
           console.log("bot active");
           resolveClientInit(client);
         }
@@ -38,7 +39,7 @@ export async function startBot({ baseUrl, userId, password, rooms }: Config) {
   });
 
   joinOnRoomInvite(client);
-  
+
   await client.loginWithPassword(userId, password);
   await client.startClient({
     disablePresence: true,

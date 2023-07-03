@@ -12,6 +12,6 @@ interface IThreadContent extends IContent {
 
 export const isThreaded = (content: IContent): content is IThreadContent => content["m.relates_to"]?.rel_type === RelationType.Thread;
 
-export const isMention = (content: IContent, userId?: string | null) => isIHTMLContent(content) && content.formatted_body.includes(`/${userId}">`);
+export const isMention = (content: IContent, userId?: string | null) => isIHTMLContent(content) && content.formatted_body?.includes(`/${userId}">`);
 
 export const getBody = (content: IContent):string => isIHTMLContent(content) ? content.formatted_body : (content.body ?? "");
