@@ -17,7 +17,8 @@
   "author": "woei",
   "license": "MIT",
   "dependencies": {
-    "matrix-js-sdk": "^26.1.0"
+    "matrix-js-sdk": "^26.1.0",
+    "turndown": "^7.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
