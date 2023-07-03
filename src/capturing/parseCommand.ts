@@ -4,6 +4,7 @@ import { CaptureOptions } from "./types";
 
 const BELOW: keyof CaptureOptions = "below";
 const PART: keyof CaptureOptions = "part";
+const HTML: keyof CaptureOptions = "html";
 
 export function parseCommand(content: ITextMessageContent) {
   let options: CaptureOptions = {};
@@ -16,6 +17,7 @@ export function parseCommand(content: ITextMessageContent) {
 
     if (words.includes(BELOW)) options.below = true;
     if (words.includes(PART)) options.part = true;
+    if (words.includes(HTML)) options.html = true;
   } else {
     throw new Error(
       `A message with mention must be html formatted, assuming not "${content.body}" is not`

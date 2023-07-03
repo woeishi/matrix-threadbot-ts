@@ -1,6 +1,7 @@
 export type CaptureOptions = {
   below?: boolean;
   part?: boolean;
+  html?: boolean;
 }
 
 export type Participant = {

@@ -7,11 +7,14 @@ import { paginate } from "../eventTimeline";
 import { parseMessage } from "./parseMessage";
 import { Participant } from "./types";
 import { formatHtml } from "./formatHtml";
+import { formatMd } from "./formatMd";
 import { getDMRoomId } from "./getDMRoomId";
 
 export async function capture(thread: Thread, textMessageEvent: TextMessageEvent) {
   if (!!thread.findEventById(textMessageEvent.getId() ?? "")) {
     const options = parseCommand(textMessageEvent.getContent());
+    
+    const formatFn = !!options.html ? formatHtml : formatMd;
     
     const timeline = thread.liveTimeline;
     await paginate(timeline, Direction.Backward, true); // TODO process per page instead of eager loading to start
@@ -26,7 +29,7 @@ export async function capture(thread: Thread, textMessageEvent: TextMessageEvent
             break;
           }
         } else {
-          content = formatHtml(parseMessage(thread, evt, participants)) +"\n\n"+content;
+          content = formatFn(parseMessage(thread, evt, participants)) +"\n\n"+content;
         }
       }
     }
