@@ -1,13 +1,15 @@
 # matrix threadbot
 
-matrix chatbot for thread export functions
+matrix chatbot for capturing thread messages
 
 ## About
 
-A bot running on Node.js connecting to a matrix network listening to user commands for thread (chat conversation) exporting functions.
+A bot running on Node.js connecting to a matrix network. 
+On receiving a mention in a thread message it captures the preceding messages
+into a single copy-pastable reply.
 
-<p align="right"><a href="#matrix-threadbot">↑</a></p>
-
+The intended purpose is knowledge capturing by facilitating the transfer of relevant discussions 
+into longer lived and searchable media like forums, wikis, documentations,...
 
 ### Built With
 
@@ -15,7 +17,7 @@ A bot running on Node.js connecting to a matrix network listening to user comman
 * [Node.js][node-url]
 * [Typescript][typescript-url]
 
-<p align="right"><a href="#matrix-threadbot">top</a></p>
+<p align="right"><a href="#matrix-threadbot">↑</a></p>
 
 
 ## Getting Started
@@ -44,11 +46,20 @@ To get a local copy up and running follow these simple example steps.
     ```
 3.  Create an `.env` and enter required data (see .env.example)
 
-<p align="right"><a href="#matrix-threadbot">top</a></p>
+<p align="right"><a href="#matrix-threadbot">↑</a></p>
 
 
 
 ## Usage
+
+### live bot
+
+mention its user handle in a message of a matrix chat thread.
+optionally following arguments:
+- `below`: post the captured message sequence in the thread instead of as direct message
+- `part`: only capture up to last bot mention, defaults to capturing the whole thread
+- `html`: format as HTML instead of default markdown
+- `help` or `?`: show help message
 
 ### Development
 
@@ -61,9 +72,6 @@ or
 yarn start:dev
 ```
 
-<p align="right"><a href="#matrix-threadbot">top</a></p>
-
-
 ### Building
 
 ```sh
@@ -74,11 +82,13 @@ or
 yarn build
 ```
 
+<p align="right"><a href="#matrix-threadbot">↑</a></p>
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right"><a href="#matrix-threadbot">top</a></p>
+<p align="right"><a href="#matrix-threadbot">↑</a></p>
 
 
 [matrix-url]: https://matrix.org/

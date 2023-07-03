@@ -49,6 +49,7 @@ export async function catchUpMention(client: MatrixClient, onMention?: (thread: 
           });
           client.sendReadReceipt(lastEvent);
         }
+        // TODO maybe also handle historic mentions outside of threads?
       }
     }
   }

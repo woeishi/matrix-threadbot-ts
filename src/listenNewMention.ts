@@ -2,6 +2,7 @@ import { MatrixClient, RoomEvent, Thread } from "matrix-js-sdk";
 import { ITextMessageContent, TextMessageEvent } from "./messageEvent/types";
 import { isIMessageEvent, isITextMessage } from "./messageEvent/guards";
 import { isMention, isThreaded } from "./messageEvent/content";
+import { tryHelp } from "./tryHelp";
 
 export function listenNewMention(client: MatrixClient, onMention?: (thread: Thread, textMessageEvent: TextMessageEvent) => Promise<void>) {
   client.on(RoomEvent.Timeline, async (event, room) => {
@@ -9,7 +10,7 @@ export function listenNewMention(client: MatrixClient, onMention?: (thread: Thre
       const content = event.getContent<ITextMessageContent>();
       if (isMention(content, client.getUserId())) {
         if (!isThreaded(content)) {
-            // TODO reply with info
+            tryHelp(room, event);
         } else {
           const thread = room.getThread(content["m.relates_to"].event_id);
           if (!!thread && !!onMention) {
