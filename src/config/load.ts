@@ -7,9 +7,10 @@ export function loadConfig():Config {
   const baseUrl = process.env.MATRIX_SERVER_URL;
   const userId = process.env.USER_ID;
   const password = process.env.PASSWORD;
+  const rooms = process.env.ROOMS?.split(',') ?? [];
 
   if (!!userId && !!password && !! baseUrl)
-    return { baseUrl, userId, password };
+    return { baseUrl, userId, password, rooms };
   else 
     throw new Error("ERR: Configuration incomplete");
 

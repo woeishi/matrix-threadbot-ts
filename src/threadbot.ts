@@ -4,8 +4,9 @@ import { Config } from "./config/types";
 import { joinOnRoomInvite } from "./joinOnRoomInvite";
 import { catchUpMention } from "./catchUpMention";
 import { listenNewMention } from "./listenNewMention";
+import { tryJoinConfiguredRooms } from "./tryJoinConfiguredRooms";
 
-export async function startBot({ baseUrl, userId, password }: Config) {
+export async function startBot({ baseUrl, userId, password, rooms }: Config) {
 
   let clientIsPrepared = false;
   let resolveClientInit = (value: MatrixClient) => {};
@@ -43,6 +44,7 @@ export async function startBot({ baseUrl, userId, password }: Config) {
     disablePresence: true,
     threadSupport: true,
   });
+  await tryJoinConfiguredRooms(client, rooms);
   await clientStartedPromise;
 
   return client;
