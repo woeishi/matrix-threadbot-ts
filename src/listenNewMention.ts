@@ -22,7 +22,8 @@ export function listenNewMention(client: MatrixClient, onMention?: (thread: Thre
           }
         }
       }
-      client.sendReadReceipt(event);
+      if (!event.getTxnId()) // HACK prevents error: 'A valid room ID and event ID must be specified'
+        client.sendReadReceipt(event).catch(e => console.error(event.getContent(), e));
     }
   });
 }

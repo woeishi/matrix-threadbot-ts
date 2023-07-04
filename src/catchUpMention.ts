@@ -1,4 +1,4 @@
-import { Direction, MatrixClient, Thread } from "matrix-js-sdk";
+import { Direction, MatrixClient, MatrixEvent, Thread } from "matrix-js-sdk";
 import { paginate } from "./eventTimeline";
 import { isIMessageEvent, isITextMessage } from "./messageEvent/guards";
 import { isMention } from "./messageEvent/content";
@@ -34,7 +34,7 @@ export async function catchUpMention(client: MatrixClient, onMention?: (thread: 
             });
           }
 
-          let lastEvent = null;
+          let lastEvent:MatrixEvent|null = null;
           timeline.getEvents().forEach(async (event, i) => {
             if (i >= readUpToIndex) {
               if (isIMessageEvent(event) && isITextMessage(event)) {
@@ -47,7 +47,8 @@ export async function catchUpMention(client: MatrixClient, onMention?: (thread: 
             }
             lastEvent = event;
           });
-          client.sendReadReceipt(lastEvent);
+          if (!!lastEvent) 
+            client.sendReadReceipt(lastEvent).catch(e => console.error(lastEvent?.getContent(), e));
         }
         // TODO maybe also handle historic mentions outside of threads?
       }
