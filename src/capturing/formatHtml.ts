@@ -14,7 +14,7 @@ export function formatHtml(
     <blockquote>\n${body}\n<blockquote>
   </figure>`);
   } else {
-    return escape(`<blockquote>\n${participant.displayName}: ${datetime.toLocaleString()}<br>\n${body}\n<blockquote>`);
+    return escape(`<blockquote>\n${participant.displayName}: ${datetime.toLocaleString()}<br>\n${body}\n</blockquote>`);
   }
 }
 
