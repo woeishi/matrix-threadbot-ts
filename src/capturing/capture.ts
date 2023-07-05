@@ -5,11 +5,18 @@ import { isIMsgEvent } from "../messageEvent/guards";
 import { isMention } from "../messageEvent/content";
 import { paginate } from "../eventTimeline";
 import { parseMessage } from "./parseMessage";
-import { Participant } from "./types";
+import { HTML, MD, PLAIN, Participant } from "./types";
 import { formatHtml } from "./formatHtml";
 import { formatMd } from "./formatMd";
 import { getDMRoomId } from "./getDMRoomId";
 import { getHelpMessage } from "./helpMessage";
+import { formatPlain } from "./formatPlain";
+
+const formatters = {
+  [HTML]: formatHtml,
+  [MD]: formatMd,
+  [PLAIN]: formatPlain
+}
 
 export async function capture(thread: Thread, textMessageEvent: TextMessageEvent) {
   if (!!thread.findEventById(textMessageEvent.getId() ?? "")) {
@@ -20,7 +27,8 @@ export async function capture(thread: Thread, textMessageEvent: TextMessageEvent
     if (options.help) {
       content = getHelpMessage();
     } else {
-      const formatFn = !!options.html ? formatHtml : formatMd;
+      options.format = options.format ?? MD;
+      const formatFn = formatters[options.format];
       
       const timeline = thread.liveTimeline;
       await paginate(timeline, Direction.Backward, true); // TODO process per page instead of eager loading to start

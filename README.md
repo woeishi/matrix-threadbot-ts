@@ -58,7 +58,7 @@ mention its user handle in a message of a matrix chat thread.
 optionally following arguments:
 - `below`: post the captured message sequence in the thread instead of as direct message
 - `part`: only capture up to last bot mention, defaults to capturing the whole thread
-- `html`: format as HTML instead of default markdown
+- `html` or `plain`: format as html or plain text (minimal md) instead of default markdown
 - `help` or `?`: show help message
 
 ### Development
