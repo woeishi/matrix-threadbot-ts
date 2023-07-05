@@ -27,14 +27,14 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-* nodejs: 16<
+* [nodejs][node-url] >= 16
 * [npm][npm-url] or [yarn][yarn-url]
 
 ### Installation
 
 1.  Clone the repo
     ```sh
-    git clone https://github.com/github_username/repo_name.git
+    git clone https://github.com/woeishi/matrix-threadbot-ts.git
     ```
 2.  Install NPM packages
     ```sh
