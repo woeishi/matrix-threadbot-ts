@@ -1,20 +1,21 @@
+import { tsToString } from "./tsToString";
 import { Message } from "./types";
 
 export function formatHtml(
   { ts, participant, body }: Message,
   semantic = false
 ) {
-  const datetime = new Date(ts);
+  const datetime = tsToString(ts);
   if (semantic) {
     return escape(`<figure>
     <figcaption>\n${
       participant.displayName
-    }: <time datetime="${datetime.toUTCString()}">${datetime.toLocaleString()}</time>
+    }: <time datetime="${new Date(ts).toISOString()}">${datetime}</time>
     </figcaption>
     <blockquote>\n${body}\n<blockquote>
   </figure>`);
   } else {
-    return escape(`<blockquote>\n${participant.displayName}: ${datetime.toLocaleString()}<br>\n${body}\n</blockquote>`);
+    return escape(`<blockquote>\n${participant.displayName}: ${datetime}<br>\n${body}\n</blockquote>`);
   }
 }
 
