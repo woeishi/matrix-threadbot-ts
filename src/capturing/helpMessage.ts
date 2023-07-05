@@ -1,3 +1,4 @@
+import { getVersion } from "../getVersion";
 import { PART, BELOW, HTML, HELP, PLAIN } from "./types";
 
 export const getHelpMessage = () => `<p>mention this bot in a thread,<br> 
@@ -10,4 +11,4 @@ e.g. <code>threadbot: part below</code></p>
 <li><strong>${HTML} or ${PLAIN}</strong>: formats the messages as html or plain text (minimal styling)<br> defaults to markdown</li>
 <li><strong>${HELP}</strong> or <strong>?</strong>: shows this message, does not execute capturing</li>
 </ul>
-<em>threadbot v.0.1.0</em>`;
+<em>threadbot v.${getVersion()}</em>`;

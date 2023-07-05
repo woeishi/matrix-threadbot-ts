@@ -1,10 +1,10 @@
 {
   "name": "matrix-threadbot",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "bot for matrix chat threads",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "yarn build && node build/index.js",
+    "start": "node build/index.js",
     "start:dev": "yarn nodemon",
     "build": "rimraf ./build && tsc"
   },
