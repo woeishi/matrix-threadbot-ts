@@ -44,13 +44,16 @@ function parseParticipant(
   const memberId = event.getSender();
   let participant: Participant = {
     displayName: memberId?.substring(1, memberId?.indexOf(":")) ?? "",
-    userId: memberId
+    userId: memberId,
   };
   if (!!memberId) {
     if (!participants[memberId]) {
       const member = thread.room.getMember(memberId);
       if (!!member) {
-        participants[memberId] = { displayName: member.rawDisplayName, userId: memberId };
+        participants[memberId] = {
+          displayName: member.rawDisplayName,
+          userId: memberId,
+        };
       } else {
         participants[memberId] = participant;
       }
@@ -68,15 +71,14 @@ function parseBody(client: MatrixClient, event: IMsgEvent) {
   )
     return parseStringMessage(event);
   else if (isILocationMessage(event)) return parseLocationMessage(event);
-  else if (
-    isIFileMessage(event) ||
-    isIImageMessage(event) ||
-    isIAudioMessage(event) ||
-    isIVideoMessage(event)
-  )
-    return parseFileMessage(client, event);
+  else if (isIFileMessage(event)) return parseFileMessage(client, event);
+  else if (isIImageMessage(event) ) return parseImageMessage(client, event);
+  else if (isIAudioMessage(event) ) return parseAudioMessage(client, event);
+  else if (isIVideoMessage(event)) return parseVideoMessage(client, event);
   else
-    throw new Error(`encountered unknown message type ${event.getContent().msgtype}`);
+    throw new Error(
+      `encountered unknown message type ${event.getContent().msgtype}`
+    );
 }
 
 const parseStringMessage = (
@@ -88,20 +90,31 @@ const parseLocationMessage = (event: LocationMessageEvent) =>
     event.getContent<ILocationContent>().body
   }</a>`;
 
-const parseFileMessage = (client: MatrixClient,
-  event:
-    | FileMessageEvent
-    | ImageMessageEvent
-    | AudioMessageEvent
-    | VideoMessageEvent
-) => {
-  let url = event.getContent<IFileContent>().url;
-  if (url.startsWith('mxc:')) {
-    const http = client.mxcUrlToHttp(url, undefined, undefined, undefined, true);
-    url = http ?? url;
-  }
-  return `<a href="${url}">${
-      event.getContent<IFileContent>().body
-    }</a>`;
-}
-  
+const resolveMXC = (client: MatrixClient, url: string) =>
+  url.startsWith("mxc:")
+    ? client.mxcUrlToHttp(url, undefined, undefined, undefined, true)
+    : url;
+
+const parseFileMessage = (client: MatrixClient, event: FileMessageEvent) => {
+  const url = resolveMXC(client, event.getContent<IFileContent>().url);
+  return `<a href="${url}">${event.getContent<IFileContent>().body}</a>`;
+};
+
+const parseImageMessage = (client: MatrixClient, event: ImageMessageEvent) => {
+  const url = resolveMXC(client, event.getContent<IFileContent>().url);
+  return `<img src="${url}" alt="${event.getContent<IFileContent>().body}">`;
+};
+
+const parseAudioMessage = (client: MatrixClient, event: AudioMessageEvent) => {
+  const url = resolveMXC(client, event.getContent<IFileContent>().url);
+  return `<audio src="${url}"><a href="url">${
+    event.getContent<IFileContent>().body
+  }</a></audio>`;
+};
+
+const parseVideoMessage = (client: MatrixClient, event: VideoMessageEvent) => {
+  const url = resolveMXC(client, event.getContent<IFileContent>().url);
+  return `<audio src="${url}"><a href="url">${
+    event.getContent<IFileContent>().body
+  }</a></audio>`;
+};
